@@ -242,7 +242,6 @@ h2{font-weight:400;font-size:22px;margin:0 0 12px}
         <input id="inKo" lang="ko" placeholder="한글만 (예: 사과)" autocomplete="off" autocorrect="off" spellcheck="false">
         <button class="btn go" id="addBtn">넣기</button>
       </div>
-      <p class="note">한/영 키를 누르지 않아도 괜찮아요. 칸에 맞게 영어와 한글로 저절로 바뀌어요.</p>
       <div class="msg" id="addMsg"></div>
       <div class="toolrow">
         <button class="btn" id="sampleBtn">예시 단어 넣기</button>
@@ -499,11 +498,11 @@ h2{font-weight:400;font-size:22px;margin:0 0 12px}
     flush();return out;
   }
   function toEnglish(s){
-    return toJamo(s||'').map(function(j){return J2K[j]||j}).join('').replace(/[^A-Za-z '\-]/g,'');
+    return toJamo(s||'').map(function(j){return J2K[j]||j}).join('').replace(/[가-힣ㄱ-ㅎㅏ-ㅣ]/g,'');
   }
   function toKorean(s){
     var arr=toJamo(s||'').map(function(ch){return K2J[ch]||K2J[ch.toLowerCase()]||ch});
-    return compose(arr).replace(/[^가-힣ㄱ-ㅎㅏ-ㅣ ,()~·]/g,'');
+    return compose(arr);
   }
   function fixField(el,fn,okRe){
     var v=el.value;if(okRe.test(v))return;
@@ -511,10 +510,10 @@ h2{font-weight:400;font-size:22px;margin:0 0 12px}
     var all=fn(v),p=Math.min(fn(v.slice(0,pos)).length,all.length);
     el.value=all;try{el.setSelectionRange(p,p)}catch(e){}
   }
-  var EN_OK=/^[A-Za-z '\-]*$/, KO_OK=/^[가-힣ㄱ-ㅎㅏ-ㅣ ,()~·]*$/;
+  var EN_OK=/^[^가-힣ㄱ-ㅎㅏ-ㅣ]*$/, KO_OK=/^[^A-Za-z]*$/;
   var desktop=window.matchMedia&&matchMedia('(pointer:fine)').matches, busy=false;
-  function fixEn(){fixField($('inEn'),toEnglish,EN_OK)}
-  function fixKo(){fixField($('inKo'),toKorean,KO_OK)}
+  function fixEn(){if(desktop)fixField($('inEn'),toEnglish,EN_OK)}
+  function fixKo(){if(desktop)fixField($('inKo'),toKorean,KO_OK)}
   // 영어칸: 한글 자판 상태로 치면 조합을 끝내고 바로 영어로 바꿔줌
   $('inEn').addEventListener('input',function(e){
     if(e.isComposing||busy){
@@ -613,10 +612,9 @@ h2{font-weight:400;font-size:22px;margin:0 0 12px}
     if(b.dataset.del){words=words.filter(function(x){return x.id!=b.dataset.del});save();renderBook()}
   };
   function addWord(en,ko){
-    en=toEnglish(en).trim().replace(/\s+/g,' ');ko=toKorean(ko).trim().replace(/\s+/g,' ');
-    if(!en)return'영어 칸에 영어 단어를 적어주세요.';
+    en=(desktop?toEnglish(en):en).trim().replace(/\s+/g,' ');ko=(desktop?toKorean(ko):ko).trim().replace(/\s+/g,' ');
+    if(!/[A-Za-z]/.test(en))return'영어 칸에 영어 단어나 문장을 적어주세요.';
     if(!/[가-힣]/.test(ko))return'뜻 칸에 한글로 뜻을 적어주세요.';
-    if(!/^[A-Za-z]/.test(en))return'영어 단어는 알파벳으로 시작해야 해요.';
     if(words.some(function(w){return w.unit===bookUnit&&w.en.toLowerCase()===en.toLowerCase()}))return'"'+en+'"은(는) 이 단원에 이미 있어요.';
     words.push({id:newId('w'),en:en,ko:ko,unit:bookUnit});return'';
   }
@@ -640,9 +638,10 @@ h2{font-weight:400;font-size:22px;margin:0 0 12px}
     var n=0,bad=0;
     $('bulkTxt').value.split(/\n/).forEach(function(line){
       if(!line.trim())return;
-      var m=line.split(/[,\t:=]/);
-      if(m.length<2){bad++;return}
-      if(!addWord(m[0],m.slice(1).join(',')))n++;else bad++;
+      var k=line.search(/[가-힣ㄱ-ㅎㅏ-ㅣ]/),a,b;
+      if(k>0){a=line.slice(0,k).replace(/[\s,\t:=]+$/,'');b=line.slice(k)}
+      else{var m=line.split(/[,\t:=]/);if(m.length<2){bad++;return}a=m[0];b=m.slice(1).join(',')}
+      if(!addWord(a,b))n++;else bad++;
     });
     save();renderBook();$('bulkTxt').value='';
     $('addMsg').style.color=n?'var(--grass)':'var(--tomato)';
@@ -741,7 +740,7 @@ h2{font-weight:400;font-size:22px;margin:0 0 12px}
         '<div class="blanks en" id="blanks"></div>'+
         '<button class="speak small" id="qSay" aria-label="발음 듣기">🔊</button>';
       drawBlanks();
-      $('spellIn').value='';$('spellIn').className='spell en';$('spellIn').disabled=false;
+      $('spellIn').value='';$('spellIn').className='spell en';$('spellIn').disabled=false;$('spellIn').readOnly=false;
       $('checkBtn').disabled=false;$('hintBtn').disabled=false;
       setTimeout(function(){$('spellIn').focus()},50);
     }
@@ -750,7 +749,7 @@ h2{font-weight:400;font-size:22px;margin:0 0 12px}
   }
   function drawBlanks(){
     var w=Q.list[Q.i].en,s='';
-    for(var k=0;k<w.length;k++){s+=w[k]===' '?'&nbsp; ':(k<Q.hints?esc(w[k]):'_')+(k<w.length-1?' ':'')}
+    for(var k=0;k<w.length;k++){s+=w[k]===' '?'&nbsp; ':(k<Q.hints||!/[A-Za-z0-9]/.test(w[k])?esc(w[k]):'_')+(k<w.length-1?' ':'')}
     $('blanks').innerHTML=s;
   }
   $('meanArea').onclick=function(e){
@@ -762,17 +761,18 @@ h2{font-weight:400;font-size:22px;margin:0 0 12px}
   };
   $('hintBtn').onclick=function(){
     var w=Q.list[Q.i].en;if(Q.done)return;
-    if(Q.hints<w.length-1){Q.hints++;if(w[Q.hints-1]===' ')Q.hints++;drawBlanks();
+    if(Q.hints<w.length-1){Q.hints++;while(Q.hints<w.length&&!/[A-Za-z0-9]/.test(w[Q.hints-1]))Q.hints++;drawBlanks();
       $('spellIn').value=w.slice(0,Q.hints).toLowerCase();$('spellIn').focus()}
     speak(w);
   };
   $('checkBtn').onclick=checkSpell;
   $('spellIn').onkeydown=function(e){if(e.key==='Enter'){e.preventDefault();Q.done?$('qNext').click():checkSpell()}};
   function checkSpell(){
-    if(Q.done)return;var v=$('spellIn').value.trim().toLowerCase().replace(/\s+/g,' ');
+    if(Q.done)return;var v=$('spellIn').value.trim();
     if(!v){$('spellIn').classList.add('shake');setTimeout(function(){$('spellIn').classList.remove('shake')},400);return}
-    var w=Q.list[Q.i],ok=v===w.en.toLowerCase();Q.done=true;
-    $('spellIn').disabled=true;$('checkBtn').disabled=true;$('hintBtn').disabled=true;
+    function norm(x){return x.toLowerCase().replace(/[^a-z0-9 ]/g,'').replace(/\s+/g,' ').trim()}
+    var w=Q.list[Q.i],ok=norm(v)===norm(w.en);Q.done=true;
+    $('spellIn').readOnly=true;$('checkBtn').disabled=true;$('hintBtn').disabled=true;
     $('spellIn').classList.add(ok?'right':'wrong',ok?'pop':'shake');
     Q.hints=w.en.length;drawBlanks();
     judge(ok);
@@ -786,6 +786,7 @@ h2{font-weight:400;font-size:22px;margin:0 0 12px}
     if(ok&&Q.mode==='mean'){Q.timer=setTimeout(function(){Q.timer=null;$('qNext').click()},1400);return}
     $('qNext').classList.remove('hidden');
     setTimeout(function(){speak(w.en)},ok?350:600);
+    if(Q.mode==='spell'){Q.timer=setTimeout(function(){Q.timer=null;$('qNext').click()},ok?1800:3500)}
     if(Q.mode==='mean')$('qNext').focus();
   }
   $('qNext').onclick=function(){clearQTimer();Q.i++;if(Q.i<Q.list.length)showQ();else showResult()};
