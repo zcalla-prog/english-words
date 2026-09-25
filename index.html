@@ -75,11 +75,14 @@ h2{font-weight:400;font-size:22px;margin:0 0 12px}
 .toolrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 .toolrow .btn{font-size:15px;padding:8px 12px}
 .list{list-style:none;margin:0;padding:0}
-.list li{display:flex;align-items:center;gap:10px;padding:10px 4px;border-bottom:2px dashed var(--line)}
+.list li{display:flex;align-items:center;gap:6px;padding:10px 2px;border-bottom:2px dashed var(--line)}
 .list li:last-child{border-bottom:0}
-.list .w{font-size:22px;font-weight:600;flex:0 0 auto}
-.list .m{flex:1;color:var(--soft)}
-.iconbtn{border:0;background:transparent;font-size:24px;padding:4px 6px;border-radius:10px}
+.list .txt{flex:1;min-width:0;display:flex;flex-wrap:wrap;align-items:center;column-gap:10px;row-gap:2px}
+.list .w{font-size:22px;font-weight:600;overflow-wrap:anywhere;line-height:1.25}
+.list .m{color:var(--soft);word-break:keep-all;overflow-wrap:anywhere;line-height:1.35}
+.list li.long .w{font-size:18px;flex-basis:100%}
+.list li.long .m{flex-basis:100%;font-size:16px}
+.iconbtn{border:0;background:transparent;font-size:22px;padding:4px 5px;border-radius:10px;flex:0 0 auto}
 .iconbtn:hover{background:var(--sky)}
 .empty{text-align:center;padding:24px 8px;color:var(--soft)}
 .count{float:right;background:var(--sky);border-radius:999px;padding:0 12px;font-size:16px}
@@ -109,7 +112,7 @@ h2{font-weight:400;font-size:22px;margin:0 0 12px}
 }
 .face.back{transform:rotateY(180deg);background:var(--card-back)}
 .bigword{font-size:clamp(44px,12vw,76px);font-weight:700;line-height:1.1;word-break:break-word}
-.bigmean{font-size:clamp(34px,9vw,56px);line-height:1.2}
+.bigmean{font-size:clamp(34px,9vw,56px);line-height:1.2;word-break:keep-all;overflow-wrap:anywhere}
 .hint{position:absolute;bottom:12px;left:0;right:0;font-size:15px;color:var(--soft)}
 .speak{
   width:76px;height:76px;border-radius:50%;border:4px solid var(--ink);background:var(--sun);
@@ -187,7 +190,33 @@ h2{font-weight:400;font-size:22px;margin:0 0 12px}
 .scopebox h2{font-size:19px;margin-bottom:10px}
 .modal{position:fixed;inset:0;background:rgba(15,25,50,.45);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50}
 .modal .box{width:100%;max-width:420px;margin:0;border-color:var(--ink);box-shadow:0 6px 0 var(--ink)}
-.modal input{width:100%;border:3px solid var(--line);border-radius:14px;padding:12px;background:var(--sky);font-size:20px;margin-bottom:6px}
+.modal input,.modal select{width:100%;border:3px solid var(--line);border-radius:14px;padding:12px;background:var(--sky);font-size:20px;margin-bottom:6px;color:var(--ink)}
+.modal select{font-size:18px}
+.flabel{display:block;font-size:15px;color:var(--soft);margin:6px 0 2px}
+
+/* 동물 친구들 */
+.pal{display:inline-block;flex:0 0 auto;vertical-align:middle}
+.hdrpal{width:62px;height:66px;cursor:pointer;transform-origin:50% 100%;animation:bob 2.6s ease-in-out infinite}
+.hdrpal.hop{animation:hop .5s}
+.bubble{position:relative;background:var(--paper);border:3px solid var(--ink);border-radius:16px;padding:4px 12px;font-size:15px;white-space:nowrap}
+.bubble::after{content:"";position:absolute;right:-9px;top:50%;margin-top:-6px;border:6px solid transparent;border-left:8px solid var(--ink)}
+.hdrside{display:flex;align-items:center;gap:8px}
+.stage{position:relative}
+.peek{position:absolute;top:-50px;right:26px;width:64px;height:70px;z-index:0;pointer-events:none}
+#studyArea .stage{margin-top:46px}
+.card{z-index:1}
+.emptypal{display:block;width:84px;height:84px;margin:0 auto 8px}
+.fbpal{width:52px;height:52px;margin-right:6px;vertical-align:-14px}
+.fbpal.hop{animation:hop .6s}
+.respal{display:block;width:110px;height:110px;margin:0 auto -4px;animation:hop .7s}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-4px) rotate(2deg)}}
+@keyframes hop{0%,100%{transform:translateY(0) scale(1)}40%{transform:translateY(-12px) scale(1.06)}70%{transform:translateY(0) scale(.97,1.03)}}
+.bigword.long{font-size:clamp(26px,7vw,40px)!important;line-height:1.2}
+.bigword.xlong{font-size:clamp(22px,5.6vw,32px)!important;line-height:1.25}
+.bigmean.long{font-size:clamp(24px,6.4vw,36px)!important}
+.bigmean.xlong{font-size:clamp(24px,6.2vw,32px)!important;line-height:1.3}
+#cWord2.long{font-size:19px!important;line-height:1.3}
+.blanks.long{font-size:clamp(20px,5.4vw,28px);letter-spacing:3px}
 .ipa{font-family:'Charis SIL','Doulos SIL','Gentium Plus','Lucida Sans Unicode','Segoe UI','Arial Unicode MS',sans-serif;
   font-size:clamp(20px,5vw,26px);color:var(--soft);margin-top:4px;letter-spacing:.5px;min-height:1em}
 .rec{font-size:12px;background:#E4F8EC;color:#1E7A45;border-radius:999px;padding:1px 8px;flex:0 0 auto}
@@ -203,12 +232,53 @@ h2{font-weight:400;font-size:22px;margin:0 0 12px}
   .modes{grid-template-columns:1fr}
 }
 @media (prefers-reduced-motion:reduce){
-  .card{transition:none}.shake,.pop{animation:none}
+  .card{transition:none}.shake,.pop,.hdrpal,.hdrpal.hop,.fbpal.hop,.respal{animation:none}
 }
 </style>
 </head>
 <body>
 <div class="wrap">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="an-bunny" viewBox="0 0 100 110">
+    <g stroke="#1F2A44" stroke-width="4" stroke-linejoin="round">
+      <ellipse cx="35" cy="30" rx="11" ry="26" fill="#fff" transform="rotate(-10 35 30)"/>
+      <ellipse cx="65" cy="30" rx="11" ry="26" fill="#fff" transform="rotate(10 65 30)"/>
+    </g>
+    <ellipse cx="35" cy="33" rx="5" ry="16" fill="#FFB3C1" transform="rotate(-10 35 33)"/>
+    <ellipse cx="65" cy="33" rx="5" ry="16" fill="#FFB3C1" transform="rotate(10 65 33)"/>
+    <ellipse cx="50" cy="74" rx="37" ry="32" fill="#fff" stroke="#1F2A44" stroke-width="4"/>
+    <circle cx="36" cy="70" r="5" fill="#1F2A44"/><circle cx="64" cy="70" r="5" fill="#1F2A44"/>
+    <circle cx="37.6" cy="68.2" r="1.7" fill="#fff"/><circle cx="65.6" cy="68.2" r="1.7" fill="#fff"/>
+    <ellipse cx="27" cy="82" rx="6.5" ry="4" fill="#FFB3C1"/><ellipse cx="73" cy="82" rx="6.5" ry="4" fill="#FFB3C1"/>
+    <ellipse cx="50" cy="78" rx="4.2" ry="3" fill="#FF7E98"/>
+    <path d="M43 83 q3.5 5 7 0 q3.5 5 7 0" fill="none" stroke="#1F2A44" stroke-width="3" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="an-bear" viewBox="0 0 100 100">
+    <g stroke="#1F2A44" stroke-width="4"><circle cx="22" cy="28" r="14" fill="#C98B5A"/><circle cx="78" cy="28" r="14" fill="#C98B5A"/></g>
+    <circle cx="22" cy="28" r="6.5" fill="#F2C9A0"/><circle cx="78" cy="28" r="6.5" fill="#F2C9A0"/>
+    <ellipse cx="50" cy="58" rx="38" ry="34" fill="#C98B5A" stroke="#1F2A44" stroke-width="4"/>
+    <ellipse cx="50" cy="71" rx="16" ry="12" fill="#F2D6B8"/>
+    <circle cx="35" cy="53" r="5" fill="#1F2A44"/><circle cx="65" cy="53" r="5" fill="#1F2A44"/>
+    <circle cx="36.6" cy="51.2" r="1.7" fill="#fff"/><circle cx="66.6" cy="51.2" r="1.7" fill="#fff"/>
+    <ellipse cx="24" cy="66" rx="6" ry="3.8" fill="#F29C8E"/><ellipse cx="76" cy="66" rx="6" ry="3.8" fill="#F29C8E"/>
+    <ellipse cx="50" cy="65" rx="6" ry="4.5" fill="#1F2A44"/>
+    <path d="M43.5 72 q3.2 4.5 6.5 0 q3.3 4.5 6.5 0" fill="none" stroke="#1F2A44" stroke-width="3" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="an-cat" viewBox="0 0 100 100">
+    <g stroke="#1F2A44" stroke-width="4" stroke-linejoin="round">
+      <path d="M17 48 L21 10 L47 30 Z" fill="#FFB547"/><path d="M83 48 L79 10 L53 30 Z" fill="#FFB547"/>
+    </g>
+    <path d="M24 36 L26 20 L38 29 Z" fill="#FFE0B0"/><path d="M76 36 L74 20 L62 29 Z" fill="#FFE0B0"/>
+    <ellipse cx="50" cy="61" rx="39" ry="32" fill="#FFB547" stroke="#1F2A44" stroke-width="4"/>
+    <path d="M50 31 v9 M41 33 l2 7 M59 33 l-2 7" stroke="#D9851C" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M30 58 q6 -7 12 0 M58 58 q6 -7 12 0" fill="none" stroke="#1F2A44" stroke-width="4" stroke-linecap="round"/>
+    <ellipse cx="27" cy="68" rx="6" ry="3.8" fill="#FF9E8A"/><ellipse cx="73" cy="68" rx="6" ry="3.8" fill="#FF9E8A"/>
+    <path d="M46.5 64 h7 l-3.5 4 Z" fill="#FF7E98" stroke="#FF7E98" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M42 70 q4 6 8 0 q4 6 8 0" fill="none" stroke="#1F2A44" stroke-width="3" stroke-linecap="round"/>
+    <path d="M8 62 l16 3 M8 72 l16 -2 M92 62 l-16 3 M92 72 l-16 -2" stroke="#1F2A44" stroke-width="2.5" stroke-linecap="round"/>
+  </symbol>
+</svg>
+
   <div id="jsWarn" style="background:#FF6B57;color:#fff;border-radius:18px;padding:14px 16px;margin:6px 0 14px;font-size:17px;line-height:1.5">
     ⚠️ 지금 화면은 <b>미리보기</b>라서 버튼이 작동하지 않아요.<br>
     안드로이드: 파일을 길게 누르거나 ⋮ 메뉴 → <b>다른 앱으로 열기 → Chrome</b><br>
@@ -216,6 +286,7 @@ h2{font-weight:400;font-size:22px;margin:0 0 12px}
   </div>
   <header>
     <h1><span>영어 단어</span> 놀이터</h1>
+    <div class="hdrside"><div class="bubble en" id="hiBubble">Hello!</div><svg class="pal hdrpal" id="hiPal" role="img" aria-label="토끼 친구"><use href="#an-bunny"/></svg></div>
   </header>
 
 
@@ -263,9 +334,10 @@ h2{font-weight:400;font-size:22px;margin:0 0 12px}
   <!-- 학습하기 -->
   <section class="panel" id="p-study">
     <div class="box scopebox"><h2>어떤 단원을 공부할까요?</h2><div class="chips" id="studyScope"></div></div>
-    <div id="studyEmpty" class="box empty hidden">이 단원에는 아직 단어가 없어요. 단어장에서 먼저 넣어주세요.</div>
+    <div id="studyEmpty" class="box empty hidden"><svg class="pal emptypal" aria-hidden="true"><use href="#an-bear"/></svg>이 단원에는 아직 단어가 없어요. 단어장에서 먼저 넣어주세요.</div>
     <div id="studyArea">
       <div class="stage">
+        <svg class="pal peek" aria-hidden="true"><use href="#an-bunny"/></svg>
         <div class="card" id="card" tabindex="0" aria-label="카드를 누르면 뒤집혀요">
           <div class="face front">
             <div class="bigword en" id="cWord"></div>
@@ -341,6 +413,22 @@ h2{font-weight:400;font-size:22px;margin:0 0 12px}
   </div>
 </div>
 
+<div class="modal hidden" id="editModal">
+  <div class="box" role="dialog" aria-modal="true" aria-labelledby="eTitle">
+    <p id="eTitle" style="font-size:20px;margin:0 0 6px">✏️ 단어 고치기</p>
+    <label class="flabel" for="eEn">영어 (단어나 문장)</label>
+    <input id="eEn" class="en" lang="en" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
+    <label class="flabel" for="eKo">뜻</label>
+    <input id="eKo" lang="ko" autocomplete="off" autocorrect="off" spellcheck="false">
+    <label class="flabel" for="eUnit">단원</label>
+    <select id="eUnit"></select>
+    <div class="msg" id="eMsg"></div>
+    <div class="toolrow" style="justify-content:flex-end">
+      <button class="btn" id="eNo">취소</button><button class="btn go" id="eYes">저장</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal hidden" id="modal">
   <div class="box" role="dialog" aria-modal="true" aria-labelledby="mMsg">
     <p id="mMsg" style="font-size:20px;margin:0 0 12px"></p>
@@ -399,6 +487,8 @@ h2{font-weight:400;font-size:22px;margin:0 0 12px}
   function key(w){return String(w||'').trim().toLowerCase()}
   function hasRec(w){return !!AUDIO[key(w)]}
   function ipaOf(w){return IPA[key(w)]||''}
+  function lenCls(t,a,b){t=String(t||'');return t.length>b?' xlong':t.length>a?' long':''}
+  function pal(n,c){return '<svg class="pal '+c+'" aria-hidden="true"><use href="#an-'+n+'"/></svg>'}
   function recTag(w){return hasRec(w)?'<span class="rec" title="원어민 녹음이 있어요">원어민</span>':''}
   function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
 
@@ -529,6 +619,14 @@ h2{font-weight:400;font-size:22px;margin:0 0 12px}
   $('inKo').addEventListener('compositionend',function(){setTimeout(fixKo,0)});
   $('inKo').addEventListener('blur',fixKo);
 
+  // ---------- 토끼 인사 ----------
+  var HI=['Hello!','Hi!','Good job!','Let\'s play!','Nice to meet you!','You can do it!'],hiN=0;
+  $('hiPal').onclick=function(){
+    hiN=(hiN+1)%HI.length;$('hiBubble').textContent=HI[hiN];speak(HI[hiN]);
+    var el=this;el.classList.remove('hop');void el.getBoundingClientRect();el.classList.add('hop');
+    setTimeout(function(){el.classList.remove('hop')},600);
+  };
+
   // ---------- 효과음 ----------
   var ac=null;
   function beep(ok){
@@ -599,10 +697,12 @@ h2{font-weight:400;font-size:22px;margin:0 0 12px}
     $('listTitle').textContent=uname(bookUnit)+' 단어';
     $('count').textContent=list.length+'개';
     var ul=$('list');
-    if(!list.length){ul.innerHTML='<li class="empty" style="display:block;border:0">이 단원에는 아직 단어가 없어요. 위에서 첫 단어를 넣어보세요!</li>';return}
+    if(!list.length){ul.innerHTML='<li class="empty" style="display:block;border:0"><svg class="pal emptypal" aria-hidden="true"><use href="#an-bear"/></svg>이 단원에는 아직 단어가 없어요. 위에서 첫 단어를 넣어보세요!</li>';return}
     ul.innerHTML=list.map(function(w){
-      return '<li><button class="iconbtn" data-say="'+w.id+'" aria-label="'+esc(w.en)+' 발음 듣기">🔊</button>'+
-        '<span class="w en">'+esc(w.en)+'</span>'+recTag(w.en)+'<span class="m">'+esc(w.ko)+'</span>'+
+      var long=w.en.length>14||w.ko.length>10;
+      return '<li'+(long?' class="long"':'')+'><button class="iconbtn" data-say="'+w.id+'" aria-label="'+esc(w.en)+' 발음 듣기">🔊</button>'+
+        '<div class="txt"><span class="w en">'+esc(w.en)+'</span>'+recTag(w.en)+'<span class="m">'+esc(w.ko)+'</span></div>'+
+        '<button class="iconbtn" data-edit="'+w.id+'" aria-label="'+esc(w.en)+' 고치기">✏️</button>'+
         '<button class="iconbtn" data-del="'+w.id+'" aria-label="'+esc(w.en)+' 지우기">🗑️</button></li>';
     }).join('');
   }
@@ -610,6 +710,30 @@ h2{font-weight:400;font-size:22px;margin:0 0 12px}
     var b=e.target.closest('button');if(!b)return;
     if(b.dataset.say){var w=words.find(function(x){return x.id==b.dataset.say});if(w)speak(w.en)}
     if(b.dataset.del){words=words.filter(function(x){return x.id!=b.dataset.del});save();renderBook()}
+    if(b.dataset.edit)openEdit(b.dataset.edit);
+  };
+  // ---------- 단어 고치기 ----------
+  var editId=null;
+  function openEdit(id){
+    var w=words.find(function(x){return x.id==id});if(!w)return;editId=w.id;
+    $('eEn').value=w.en;$('eKo').value=w.ko;$('eMsg').textContent='';
+    $('eUnit').innerHTML=units.map(function(u){return '<option value="'+u.id+'"'+(u.id===w.unit?' selected':'')+'>'+esc(u.name)+'</option>'}).join('');
+    $('editModal').classList.remove('hidden');setTimeout(function(){$('eEn').focus()},30);
+  }
+  function closeEdit(){$('editModal').classList.add('hidden');editId=null}
+  $('eNo').onclick=closeEdit;
+  $('editModal').onkeydown=function(e){if(e.key==='Escape')closeEdit()};
+  $('eEn').onkeydown=function(e){if(e.key==='Enter'&&!e.isComposing){e.preventDefault();$('eKo').focus()}};
+  $('eKo').onkeydown=function(e){if(e.key==='Enter'&&!e.isComposing){e.preventDefault();$('eYes').click()}};
+  $('eYes').onclick=function(){
+    var w=words.find(function(x){return x.id==editId});if(!w){closeEdit();return}
+    var en=$('eEn').value.trim().replace(/\s+/g,' '),ko=$('eKo').value.trim().replace(/\s+/g,' '),u=$('eUnit').value;
+    var err=!/[A-Za-z]/.test(en)?'영어 칸에 영어 단어나 문장을 적어주세요.':
+      !/[가-힣]/.test(ko)?'뜻 칸에 한글로 뜻을 적어주세요.':
+      words.some(function(x){return x.id!==w.id&&x.unit===u&&x.en.toLowerCase()===en.toLowerCase()})?'"'+en+'"은(는) 그 단원에 이미 있어요.':'';
+    if(err){$('eMsg').textContent=err;return}
+    var moved=w.unit!==u;w.en=en;w.ko=ko;w.unit=u;save();closeEdit();renderBook();
+    showMsg('"'+en+'" 고쳤어요!'+(moved?' ('+uname(u)+'(으)로 옮겼어요)':''));
   };
   function addWord(en,ko){
     en=(desktop?toEnglish(en):en).trim().replace(/\s+/g,' ');ko=(desktop?toKorean(ko):ko).trim().replace(/\s+/g,' ');
@@ -673,7 +797,8 @@ h2{font-weight:400;font-size:22px;margin:0 0 12px}
   }
   function showCard(say){
     var w=deck[pos];$('card').classList.remove('flip');
-    $('cWord').textContent=w.en;$('cWord2').textContent=w.en;$('cMean').textContent=w.ko;var ip=ipaOf(w.en);$('cIpa').textContent=ip;$('cIpa2').textContent=ip;
+    $('cWord').textContent=w.en;$('cWord2').textContent=w.en;$('cMean').textContent=w.ko;
+    $('cWord').className='bigword en'+lenCls(w.en,12,28);$('cMean').className='bigmean'+lenCls(w.ko,8,18);$('cWord2').className='en'+(w.en.length>14?' long':'');var ip=ipaOf(w.en);$('cIpa').textContent=ip;$('cIpa2').textContent=ip;
     $('prog').textContent=(pos+1)+' / '+deck.length;
     $('prevBtn').disabled=pos===0;
     $('nextBtn').textContent=pos===deck.length-1?'처음으로 ↺':'다음 ▶';
@@ -727,7 +852,7 @@ h2{font-weight:400;font-size:22px;margin:0 0 12px}
     $('fb').innerHTML='';$('qNext').classList.add('hidden');
     if(Q.mode==='mean'){
       $('qCard').innerHTML='<div class="ask">이 단어의 뜻은 무엇일까요?</div><div class="qrow">'+
-        '<div class="bigword en" style="font-size:clamp(38px,10vw,60px)">'+esc(w.en)+'</div>'+
+        '<div class="bigword en'+lenCls(w.en,12,28)+'" style="font-size:clamp(38px,10vw,60px)">'+esc(w.en)+'</div>'+
         '<button class="speak small" id="qSay" aria-label="발음 듣기">🔊</button></div>';
       // 오답 보기: 같은 범위에서 먼저 고르고, 모자라면 다른 단원에서 채움
       var cand=shuffle(scopeWords()).concat(shuffle(words)),others=[],seen={};seen[w.ko]=1;
@@ -736,8 +861,8 @@ h2{font-weight:400;font-size:22px;margin:0 0 12px}
       $('meanArea').innerHTML=opts.map(function(o){return'<button class="choice" data-id="'+o.id+'">'+esc(o.ko)+'</button>'}).join('');
     }else{
       $('qCard').innerHTML='<div class="ask">잘 듣고 영어로 써보세요</div>'+
-        '<div class="bigmean" style="font-size:clamp(30px,8vw,46px)">'+esc(w.ko)+'</div>'+
-        '<div class="blanks en" id="blanks"></div>'+
+        '<div class="bigmean'+lenCls(w.ko,8,18)+'" style="font-size:clamp(30px,8vw,46px)">'+esc(w.ko)+'</div>'+
+        '<div class="blanks en'+(w.en.length>12?' long':'')+'" id="blanks"></div>'+
         '<button class="speak small" id="qSay" aria-label="발음 듣기">🔊</button>';
       drawBlanks();
       $('spellIn').value='';$('spellIn').className='spell en';$('spellIn').disabled=false;$('spellIn').readOnly=false;
@@ -779,8 +904,8 @@ h2{font-weight:400;font-size:22px;margin:0 0 12px}
   }
   function judge(ok){
     var w=Q.list[Q.i];beep(ok);
-    if(ok){Q.score++;$('fb').innerHTML='🎉 딩동댕! 잘했어요!'}
-    else{Q.wrong.push(w);$('fb').innerHTML='괜찮아요! 정답은 <span class="en">'+esc(w.en)+'</span> ('+esc(w.ko)+')'}
+    if(ok){Q.score++;$('fb').innerHTML=pal('cat','fbpal hop')+'딩동댕! 잘했어요!'}
+    else{Q.wrong.push(w);$('fb').innerHTML=pal('bear','fbpal')+'괜찮아요! 정답은 <span class="en">'+esc(w.en)+'</span> ('+esc(w.ko)+')'}
     $('qScore').textContent='⭐ '+Q.score;
     $('qNext').textContent=Q.i===Q.list.length-1?'결과 보기 ▶':'다음 문제 ▶';
     if(ok&&Q.mode==='mean'){Q.timer=setTimeout(function(){Q.timer=null;$('qNext').click()},1400);return}
@@ -795,11 +920,11 @@ h2{font-weight:400;font-size:22px;margin:0 0 12px}
     $('quizPlay').classList.add('hidden');
     var n=Q.list.length,r=Q.score/n,stars=r===1?3:r>=0.7?2:r>=0.4?1:0;
     var talk=['다시 한 번 도전해봐요!','조금만 더 하면 돼요!','아주 잘했어요!','완벽해요! 최고예요!'][stars];
-    var h='<div class="stars">'+'⭐'.repeat(stars)+'<span style="opacity:.25">'+'⭐'.repeat(3-stars)+'</span></div>'+
+    var h=pal(['bear','bear','bunny','cat'][stars],'respal')+'<div class="stars">'+'⭐'.repeat(stars)+'<span style="opacity:.25">'+'⭐'.repeat(3-stars)+'</span></div>'+
       '<p class="muted" style="margin:0">'+esc(scope==='all'?'전체':uname(scope))+'</p><div class="score">'+n+'문제 중 '+Q.score+'개 맞혔어요</div><p style="font-size:22px;margin:6px 0 14px">'+talk+'</p>';
     if(Q.wrong.length){
       h+='<div class="wronglist"><h2>다시 볼 단어</h2><ul class="list">'+Q.wrong.map(function(w){
-        return'<li><button class="iconbtn" data-say="'+esc(w.en)+'" aria-label="발음 듣기">🔊</button><span class="w en">'+esc(w.en)+'</span><span class="m">'+esc(w.ko)+'</span></li>'}).join('')+'</ul></div>';
+        return'<li'+(w.en.length>14||w.ko.length>10?' class="long"':'')+'><button class="iconbtn" data-say="'+esc(w.en)+'" aria-label="발음 듣기">🔊</button><div class="txt"><span class="w en">'+esc(w.en)+'</span><span class="m">'+esc(w.ko)+'</span></div></li>'}).join('')+'</ul></div>';
     }
     h+='<div class="toolrow" style="justify-content:center;margin-top:16px">';
     if(Q.wrong.length&&(Q.mode==='spell'||words.length>=4))h+='<button class="btn red" id="retryWrong">틀린 단어만 다시</button>';
